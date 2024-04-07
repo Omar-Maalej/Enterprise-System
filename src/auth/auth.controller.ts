@@ -7,10 +7,5 @@ import { User } from 'src/users/entities/user.entity';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
-  register(
-    @Body() userData: UserRegisterDto
-  ): Promise<Partial<User>> {
-    return this.authService.register(userData);
-  }
+ 
 }
