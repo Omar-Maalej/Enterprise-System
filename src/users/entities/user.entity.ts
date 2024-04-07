@@ -41,24 +41,20 @@ export class User {
   @Column()
   picture: string;
 
-  @Column(
-    {
-      length: 50
-    }
-  )
+  @Column({
+    type: 'enum',
+    enum: UserRoleEnum,
+    default: UserRoleEnum.USER
+})
+  role: string;
+
+  @Column()
   @Exclude()
   password: string;
 
   @Column()
   @Exclude()
     salt: string;
-
-    @Column({
-        type: 'enum',
-        enum: UserRoleEnum,
-        default: UserRoleEnum.USER
-    })
-    role: string;
 
   @DeleteDateColumn({ nullable: true, default: null })
   deletedAt: Date; // Soft delete column
