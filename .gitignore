@@ -3,7 +3,7 @@
 /node_modules
 /build
 /mysql_data
-.docker-compose.yaml
+docker-compose.yaml
 
 # Logs
 logs
