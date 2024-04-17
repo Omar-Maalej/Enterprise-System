@@ -7,11 +7,7 @@ export class CreateMessageDto {
 
     @IsInt()
     @IsOptional()
-    receiverId?: number;
-
-    @IsInt()
-    @IsOptional()
-    roomId?: number;
+    receiverId: number;
 
     @IsString()
     @IsNotEmpty()

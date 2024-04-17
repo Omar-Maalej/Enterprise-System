@@ -18,7 +18,7 @@ export class Message {
   @Column('text')
   messageContent: string;
 
-  @Column({ default: false })
+  @Column({ default: false }) // false : is not a room, true: is a room
   isRoom: boolean;
 
   @CreateDateColumn()
