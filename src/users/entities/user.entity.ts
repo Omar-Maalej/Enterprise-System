@@ -58,6 +58,6 @@ export class User {
 
   @DeleteDateColumn({ nullable: true, default: null })
   deletedAt: Date; // Soft delete column
-
+    
  
 }

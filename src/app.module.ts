@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { MessagesModule } from './messages/messages.module';
+import { RoomsModule } from './rooms/rooms.module';
 import * as dotenv from 'dotenv';
 
 
@@ -21,7 +23,7 @@ dotenv.config();
       entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
-    }), AuthModule,
+    }), AuthModule, MessagesModule, RoomsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
