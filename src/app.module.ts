@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { ChatModule } from './chat/chat.module';
+import { MessagesGateway } from './chat/message.gateway';
 import * as dotenv from 'dotenv';
 
 
@@ -22,9 +22,9 @@ dotenv.config();
       entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
-    }), AuthModule, ChatModule,
+    }), AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,MessagesGateway],
 })
 export class AppModule {}
