@@ -1,0 +1,63 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Room {
+  """The unique identifier of the room"""
+  id: ID!
+
+  """The name of the room"""
+  name: String!
+
+  """The date and time the room was created"""
+  createdAt: DateTime!
+
+  """List of users in the room"""
+  users: [User!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type User {
+  id: ID!
+  username: String!
+  firstname: String!
+  lastname: String!
+  email: String!
+  cin: String!
+  jobtitle: String!
+  picture: String!
+  role: String!
+  deletedAt: DateTime
+}
+
+type Query {
+  rooms: [Room!]!
+  room(id: Int!): Room!
+}
+
+type Mutation {
+  createRoom(createRoomInput: CreateRoomInput!): Room!
+  updateRoom(updateRoomInput: UpdateRoomInput!): Room!
+  removeRoom(id: Int!): Room!
+}
+
+input CreateRoomInput {
+  """the name of the room"""
+  name: String!
+
+  """List of user IDs to be added to the room"""
+  userIds: [ID!]
+}
+
+input UpdateRoomInput {
+  """the name of the room"""
+  name: String
+
+  """List of user IDs to be added to the room"""
+  userIds: [ID!]
+  id: Int!
+}

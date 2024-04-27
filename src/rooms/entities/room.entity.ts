@@ -1,6 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { User } from '../../users/entities/user.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -18,5 +18,6 @@ export class Room {
   createdAt: Date;
 
   @Field(() => [User], { description: 'List of users in the room' })
+  @ManyToMany(()=>User, (user) => user.rooms)
   users: User[];
 }

@@ -1,7 +1,10 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Field, ID } from '@nestjs/graphql';
 
 @InputType()
 export class CreateRoomInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field({ description: 'the name of the room' })
+  name : string;
+
+  @Field(() => [ID], { nullable: true, description: 'List of user IDs to be added to the room' })
+  userIds?: number[];
 }
