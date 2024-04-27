@@ -26,7 +26,7 @@ export class MessagesGateway {
   }
   @SubscribeMessage('allMessages')
   getAllMessages(@ConnectedSocket() client: Socket): any {
-    //console.log(client);
+    console.log(client);
     return this.messges;
   }
 
@@ -34,8 +34,14 @@ export class MessagesGateway {
   addMessage(client: any, @MessageBody() createMessageDto: CreateMessageDto): any {
     const id = this.messges[this.messges.length - 1].id + 1;
     const {user, content} = createMessageDto;
+    console.log(createMessageDto);
+    console.log(createMessageDto.user);
+    console.log(createMessageDto.content);
+
     const newMessage = {id, user, content};
+    console.log(newMessage);
     this.messges.push(newMessage);
+    console.log(this.messges);
     this.server.emit('new-message', newMessage)
     return this.messges;
   }

@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { MessagesGateway } from './chat/message.gateway';
+import { MessageController } from './chat/message.controller';
+import { MessageService } from './chat/message.service';
 import * as dotenv from 'dotenv';
 
 
@@ -24,7 +26,7 @@ dotenv.config();
       synchronize: true,
     }), AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService,MessagesGateway],
+  controllers: [AppController, MessageController],
+  providers: [AppService,MessagesGateway, MessageService],
 })
 export class AppModule {}
