@@ -40,7 +40,7 @@ export class UsersService {
     if (newUser) {
       return await this.userRepository.save(newUser);
     } else {
-      throw new NotFoundException('user inexistant');
+      throw new NotFoundException(`le user d'id ${id} n'existe pas` );
     }
 }
  
@@ -51,4 +51,12 @@ export class UsersService {
  async restoreUser(id: number) {
   return await this.userRepository.restore(id);
 }
+
+  async findUsersByRoomId(roomId: number): Promise<User[]> {
+    return await this.userRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.rooms', 'room')
+      .where('room.id = :roomId', { roomId })
+      .getMany();
+  }
 }

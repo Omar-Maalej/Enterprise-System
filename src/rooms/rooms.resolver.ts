@@ -1,12 +1,14 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { RoomsService } from './rooms.service';
 import { Room } from './entities/room.entity';
 import { CreateRoomInput } from './dto/create-room.input';
 import { UpdateRoomInput } from './dto/update-room.input';
+import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/entities/user.entity';
 
 @Resolver(() => Room)
 export class RoomsResolver {
-  constructor(private readonly roomsService: RoomsService) {}
+  constructor(private readonly roomsService: RoomsService, private readonly usersService : UsersService) {}
 
   @Mutation(() => Room)
   createRoom(@Args('createRoomInput') createRoomInput: CreateRoomInput) {
@@ -31,5 +33,12 @@ export class RoomsResolver {
   @Mutation(() => Room)
   removeRoom(@Args('id', { type: () => Int }) id: number) {
     return this.roomsService.remove(id);
+
+   
+  }
+  
+  @ResolveField(()=>[User])
+  async users(@Parent() room: Room) {
+    return this.roomsService.getUsers(room.id);
   }
 }

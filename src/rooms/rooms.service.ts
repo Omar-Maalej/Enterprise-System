@@ -8,30 +8,30 @@ import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class RoomsService {
+  
   constructor(@InjectRepository(Room) private roomRepository: Repository<Room>,
               private readonly usersService : UsersService              
 ){}
-  
+
   async create(createRoomInput: CreateRoomInput): Promise<Room> {
     const room = this.roomRepository.create({
       ...createRoomInput,
       createdAt: new Date() 
     });
-    const users = await Promise.all(createRoomInput.userIds.map(userId => this.usersService.findOne(userId)));
-    
-    room.users = users;
     
     return this.roomRepository.save(room);
   }
 
 
   async findAll(): Promise<Room[]> {
-    const rooms =  await this.roomRepository
+  /*   const rooms =  await this.roomRepository
     .createQueryBuilder('room')
     .leftJoinAndSelect('room.users', 'user')
     .getMany();
     console.log(rooms);
-    return rooms;
+    return rooms; */
+    // fixed with @resolveField in rooms.resolver.ts
+    return this.roomRepository.find();
   }
 
   async findOne(id: number) : Promise<Room | null> {
@@ -60,5 +60,9 @@ export class RoomsService {
     await this.roomRepository.softDelete(id);
     return room;
     
+  }
+
+  getUsers(id: number) {
+    return this.usersService.findUsersByRoomId(id);
   }
 }
