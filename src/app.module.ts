@@ -8,6 +8,9 @@ import { MessagesModule } from './messages/messages.module';
 import { RoomsModule } from './rooms/rooms.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { MessagesGateway } from './chat/message.gateway';
+import { MessageController } from './chat/message.controller';
+import { MessageService } from './chat/message.service';
 import * as dotenv from 'dotenv';
 
 
@@ -32,7 +35,7 @@ dotenv.config();
       synchronize: true,
     }), AuthModule, MessagesModule, RoomsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, MessageController],
+  providers: [AppService,MessagesGateway, MessageService],
 })
 export class AppModule {}
