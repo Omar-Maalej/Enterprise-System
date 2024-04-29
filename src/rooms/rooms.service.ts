@@ -19,6 +19,8 @@ export class RoomsService {
       createdAt: new Date(),
     });
     const users = await Promise.all(createRoomInput.userIds.map(userId => this.usersService.findOne(userId)));
+    if(users.length !== createRoomInput.userIds.length)
+      throw new NotFoundException(`Some users not found`);
 
     room.users = users;
     
@@ -55,6 +57,30 @@ export class RoomsService {
   } else {
     throw new NotFoundException(`room with id ${updateRoomInput.id} doesn't exist `);
   }
+  }
+
+  async addUsersToRoom(roomId: number, userIds: number[]): Promise<Room> {
+    const room = await this.findOne(roomId);
+    //console.log(room);
+    if(!room)
+      throw new NotFoundException(`room with id ${roomId} doesn't exist `);
+    const users = await Promise.all(userIds.map(userId => this.usersService.findOne(userId)));
+    if(users.length !== userIds.length)
+      throw new NotFoundException(`Some users not found`);
+    room.users = [...room.users, ...users];
+    return this.roomRepository.save(room);
+  }
+
+  async removeUsersFromRoom(roomId: number, userIds: number[]): Promise<Room> {
+    const room = await this.findOne(roomId);
+    console.log(room);
+    if(!room)
+      throw new NotFoundException(`room with id ${roomId} doesn't exist `);
+    const users = await Promise.all(userIds.map(userId => this.usersService.findOne(userId)));
+    if(users.length !== userIds.length)
+      throw new NotFoundException(`Some users not found`);
+    room.users = room.users.filter(user => !userIds.includes(user.id));
+    return this.roomRepository.save(room);
   }
 
   async remove(id: number): Promise<Room>{

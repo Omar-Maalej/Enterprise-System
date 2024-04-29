@@ -18,7 +18,7 @@ export class Room {
   createdAt: Date;
 
   @Field(() => [User], { description: 'List of users in the room' })
-  @ManyToMany(()=>User, (user) => user.rooms)
+  @ManyToMany(()=>User, (user) => user.rooms, {eager: true})
   users: User[];
 
   @Field(()=>Date, {description: 'The date the room was deleted'})

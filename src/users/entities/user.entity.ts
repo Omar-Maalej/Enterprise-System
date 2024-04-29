@@ -73,7 +73,7 @@ export class User {
   @Field({nullable:true})
   deletedAt: Date; // Soft delete column
 
-  @ManyToMany(() => Room, (room)=>room.users, { eager: true })
+  @ManyToMany(() => Room, (room)=>room.users)
   @JoinTable()
   rooms : Room[];
     

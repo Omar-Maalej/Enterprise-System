@@ -46,6 +46,8 @@ type Mutation {
   createRoom(createRoomInput: CreateRoomInput!): Room!
   updateRoom(updateRoomInput: UpdateRoomInput!): Room!
   removeRoom(id: Int!): Room!
+  addUsersToRoom(roomId: Int!, userIds: [Int!]!): Room!
+  removeUsersFromRoom(roomId: Int!, userIds: [Int!]!): Room!
 }
 
 input CreateRoomInput {

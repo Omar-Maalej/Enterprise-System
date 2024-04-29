@@ -30,11 +30,19 @@ export class RoomsResolver {
     return this.roomsService.update(updateRoomInput);
   }
 
-
-
   @Mutation(() => Room)
   removeRoom(@Args('id', { type: () => Int }) id: number) {
     return this.roomsService.remove(id);
+  }
+
+  @Mutation(()=>Room)
+  addUsersToRoom(@Args('roomId', {type: ()=>Int}) roomId: number, @Args('userIds', {type: ()=>[Int]}) userIds: number[]){
+    return this.roomsService.addUsersToRoom(roomId, userIds);
+  }
+
+  @Mutation(()=>Room)
+  removeUsersFromRoom(@Args('roomId', {type: ()=>Int}) roomId: number, @Args('userIds', {type: ()=>[Int]}) userIds: number[]){
+    return this.roomsService.removeUsersFromRoom(roomId, userIds);
   }
   
   @ResolveField(()=>[User])
