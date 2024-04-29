@@ -9,11 +9,14 @@ type Room {
   """The name of the room"""
   name: String!
 
-  """The date and time the room was created"""
+  """The date the room was created"""
   createdAt: DateTime!
 
   """List of users in the room"""
   users: [User!]!
+
+  """The date the room was deleted"""
+  deleteAt: DateTime!
 }
 
 """

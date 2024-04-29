@@ -27,14 +27,14 @@ export class RoomsResolver {
 
   @Mutation(() => Room)
   updateRoom(@Args('updateRoomInput') updateRoomInput: UpdateRoomInput) {
-    return this.roomsService.update(updateRoomInput.id, updateRoomInput);
+    return this.roomsService.update(updateRoomInput);
   }
+
+
 
   @Mutation(() => Room)
   removeRoom(@Args('id', { type: () => Int }) id: number) {
     return this.roomsService.remove(id);
-
-   
   }
   
   @ResolveField(()=>[User])

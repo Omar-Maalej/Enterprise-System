@@ -16,8 +16,11 @@ export class RoomsService {
   async create(createRoomInput: CreateRoomInput): Promise<Room> {
     const room = this.roomRepository.create({
       ...createRoomInput,
-      createdAt: new Date() 
+      createdAt: new Date(),
     });
+    const users = await Promise.all(createRoomInput.userIds.map(userId => this.usersService.findOne(userId)));
+
+    room.users = users;
     
     return this.roomRepository.save(room);
   }
@@ -41,14 +44,16 @@ export class RoomsService {
     else return room;
   }
 
-  async update(id: number, updateRoomInput: UpdateRoomInput): Promise<Room>  {
+  async update(updateRoomInput: UpdateRoomInput): Promise<Room>  {
+    //console.log(updateRoomInput);
     const room = await this.roomRepository.preload({
-      id: id,
-      ...UpdateRoomInput});
+      id: updateRoomInput.id,
+      ...updateRoomInput});
+    //console.log(room);
   if (room) {
     return this.roomRepository.save(room);
   } else {
-    throw new NotFoundException(`room with id ${id} doesn't exist `);
+    throw new NotFoundException(`room with id ${updateRoomInput.id} doesn't exist `);
   }
   }
 
