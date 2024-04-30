@@ -4,6 +4,7 @@
 /build
 /mysql_data
 docker-compose.yaml
+/redis_data
 
 # Logs
 logs

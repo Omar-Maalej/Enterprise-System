@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE Example</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #events { margin-top: 20px; }
+        .event { background: #f0f0f0; margin-bottom: 10px; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Server-Sent Events Test</h1>
+    <div id="events"></div>
+
+    <script>
+        const eventSource = new EventSource('http://localhost:3000/events/subscribe');
+
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const eventContainer = document.getElementById('events');
+            const eventElement = document.createElement('div');
+            eventElement.className = 'event';
+            eventElement.textContent = 'New User Added: ' + data.data.username + ' (ID: ' + data.data.id + ') ' + event.data; 
+
+            eventContainer.appendChild(eventElement);
+        };
+
+        eventSource.onerror = function(error) {
+            console.error('EventSource failed:', error);
+            eventSource.close();
+        };
+    </script>
+</body>
+</html>

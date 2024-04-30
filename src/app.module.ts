@@ -12,13 +12,16 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 // import { MessageController } from './chat/message.controller';
 // import { MessageService } from './chat/message.service';
 import * as dotenv from 'dotenv';
+import { RedisModule } from 'nestjs-ioredis';
+import { SseModule } from './sse/sse.module';
 
 
 
 dotenv.config();
 
 @Module({
-  imports: [UsersModule, 
+  imports: [UsersModule,
+    SseModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
     driver: ApolloDriver,
     autoSchemaFile : 'src/schema.gql'
@@ -33,7 +36,14 @@ dotenv.config();
       entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
-    }), AuthModule, MessagesModule, RoomsModule,
+    }), 
+    RedisModule.forRoot({
+      host: process.env.REDIS_HOST,
+      port: parseInt(process.env.REDIS_PORT),
+      password: process.env.REDIS_PASSWORD,
+      db: parseInt(process.env.REDIS_DB),
+    })
+    ,AuthModule, MessagesModule, RoomsModule,
   ],
   // controllers: [AppController, MessageController],
   controllers: [AppController],

@@ -3,16 +3,22 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { SseService } from 'src/sse/sse.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly sseService: SseService
+  ) {}
 
   @Post()
   async create(@Body() newUser: CreateUserDto) {
       newUser.salt= await bcrypt.genSalt();
       newUser.password=await bcrypt.hash(newUser.password,newUser.salt);
-      return await this.usersService.create(newUser);
+      const userCreated = await this.usersService.create(newUser);
+      this.sseService.sendEvent({event: 'newUser', data: userCreated});
+      return userCreated;
   }
   
   @Get()

@@ -25,6 +25,8 @@ function initSocket() {
     });
 
     socket.on('new-message', message => {
+
+        console.log('New message received:', message);
     
         const currentUser = localStorage.getItem('userId');
         const selectedUser = localStorage.getItem('selectedUserId');

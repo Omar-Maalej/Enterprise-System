@@ -43,14 +43,18 @@ export class MessagesController {
     
     const { senderId, receiverId, isRoom } = req.query;
     this.logger.log(`senderId: ${senderId}, receiverId: ${receiverId}, isRoom: ${isRoom}`);
+    this.logger.debug(`type of isRoom: ${typeof isRoom}`);
 
-
-    if (isRoom === true) {
-      // to add a Guard to check if the user is a member of the room
+    if (isRoom == "true") {
+      //TODO a Guard to check if the user is a member of the room
+      this.logger.debug(`isRoom is true`);
       return this.messagesService.findMessagesRoom(receiverId);
+    } else {
+      this.logger.debug(`isRoom is false`);
+      return this.messagesService.findOneToOneMessage(senderId, receiverId);
+
     }
     
-    return this.messagesService.findOneToOneMessage(senderId, receiverId);
   }
 
   @Get(':id')
