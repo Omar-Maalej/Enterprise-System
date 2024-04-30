@@ -22,7 +22,7 @@
             const eventContainer = document.getElementById('events');
             const eventElement = document.createElement('div');
             eventElement.className = 'event';
-            eventElement.textContent = 'New User Added: ' + data.data.username + ' (ID: ' + data.data.id + ') ' + event.data; 
+            eventElement.textContent = 'New User Added: ' + event.data; 
 
             eventContainer.appendChild(eventElement);
         };

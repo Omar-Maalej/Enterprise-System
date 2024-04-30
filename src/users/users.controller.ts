@@ -3,13 +3,13 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
-import { SseService } from 'src/sse/sse.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly sseService: SseService
+    private readonly eventEmitter: EventEmitter2
   ) {}
 
   @Post()
@@ -17,7 +17,7 @@ export class UsersController {
       newUser.salt= await bcrypt.genSalt();
       newUser.password=await bcrypt.hash(newUser.password,newUser.salt);
       const userCreated = await this.usersService.create(newUser);
-      this.sseService.sendEvent({event: 'newUser', data: userCreated});
+      this.eventEmitter.emit('user.created', userCreated);
       return userCreated;
   }
   

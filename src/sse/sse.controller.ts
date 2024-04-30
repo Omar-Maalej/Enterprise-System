@@ -9,6 +9,7 @@ export class SseController {
 
   @Sse('subscribe')
   subscribe(@Res() res: Response): Observable<any> {
+    console.log('Client subscribed', res);
     this.sseService.addClient(res);
     return new Observable(subscriber => {
       res.on('close', () => {
