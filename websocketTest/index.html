@@ -6,6 +6,7 @@
     <title>WebSocket Client</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <h2>WebSocket Test Client</h2>
@@ -13,9 +14,9 @@
         <ul id="messages" aria-live="polite"></ul>
     </div>
     <form id="messageForm">
-        <input type="text" id="userInput" placeholder="Your name" required>
+        <!-- <input type="text" id="userInput" placeholder="Your ID" required> -->
         <input type="text" id="messageInput" placeholder="Type a message..." required>
-        <button type="submit">Send Message</button>
+        <button type="submit" id="submitBtn">Send Message</button>
     </form>
 
     <script src="client.js"></script>

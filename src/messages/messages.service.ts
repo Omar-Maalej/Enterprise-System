@@ -12,8 +12,19 @@ export class MessagesService {
     private messagesRepository: Repository<Message>,
   ) {}
 
-  create(createMessageDto: CreateMessageDto) {
-    return this.messagesRepository.save(createMessageDto);
+  async create(createMessageDto: CreateMessageDto){
+    const newMessage = new Message();
+    newMessage.senderId = createMessageDto.senderId;
+    newMessage.messageContent = createMessageDto.messageContent;
+    createMessageDto.receiverId ? newMessage.receiverId = createMessageDto.receiverId : null;
+    createMessageDto.roomId ? newMessage.roomId = createMessageDto.roomId : null;
+    let messageToReturn = await this.messagesRepository.save(newMessage);
+
+    messageToReturn = await this.messagesRepository.findOne({ where: { id: messageToReturn.id },
+      relations: ['sender', 'receiver', 'room']
+   });
+   
+    return messageToReturn;
   }
 
   findAll() {

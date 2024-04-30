@@ -4,10 +4,13 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { Message } from './entities/message.entity';
 import { ApiTags } from '@nestjs/swagger';
+import { Logger } from '@nestjs/common';
 
 @ApiTags('messages')
 @Controller('messages')
 export class MessagesController {
+  private readonly logger = new Logger(MessagesController.name);
+
   constructor(private readonly messagesService: MessagesService) {}
 
   @Post()
@@ -38,6 +41,8 @@ export class MessagesController {
   @Get()
   async getMessages(@Body() body: any): Promise<Message[]> {
     const { senderId, receiverId, isRoom } = body;
+    this.logger.log(`senderId: ${senderId}, receiverId: ${receiverId}, isRoom: ${isRoom}`);
+
 
     if (isRoom) {
       // to add a Guard to check if the user is a member of the room
