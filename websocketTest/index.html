@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebSocket Client</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        ul { list-style-type: none; padding: 0; }
-        li { padding: 8px; background-color: #f0f0f0; border: 1px solid #ddd; margin-top: 5px; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" crossorigin="anonymous"></script>
-  </head>
+</head>
 <body>
     <h2>WebSocket Test Client</h2>
-    <ul id="messages"></ul>
-    <input type="text" id="userInput" placeholder="Your name">
-    <input type="text" id="messageInput" placeholder="Type a message...">
-    <button onclick="sendMessage()">Send Message</button>
+    <div>
+        <ul id="messages" aria-live="polite"></ul>
+    </div>
+    <form id="messageForm">
+        <input type="text" id="userInput" placeholder="Your name" required>
+        <input type="text" id="messageInput" placeholder="Type a message..." required>
+        <button type="submit">Send Message</button>
+    </form>
 
     <script src="client.js"></script>
 </body>

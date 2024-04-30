@@ -1,7 +1,13 @@
-const socket = io('http://localhost:3000'); 
+const socket = io('http://localhost:3000');
+
+document.getElementById('messageForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    sendMessage();
+});
 
 socket.on('connect', () => {
     console.log('Connected to WebSocket server!');
+    requestInitialMessages();
 });
 
 socket.on('new-message', message => {
@@ -24,16 +30,17 @@ function sendMessage() {
     const user = document.getElementById('userInput').value.trim();
     const content = document.getElementById('messageInput').value.trim();
 
-    if (!user || !content) {
+    if (user && content) {
+        const message = { user, content };
+        socket.emit('addMessage', message);
+        document.getElementById('messageInput').value = '';
+    } else {
         alert('Please enter both your name and a message.');
-        return;
     }
-
-    const message = { user, content };
-    socket.emit('addMessage', message);
-    document.getElementById('messageInput').value = '';
 }
 
-socket.emit(' ', {}, (messages) => {
-    messages.forEach(addMessageToList);
-});
+function requestInitialMessages() {
+    socket.emit('getAllMessages', {}, (messages) => {
+        messages.forEach(addMessageToList);
+    });
+}
