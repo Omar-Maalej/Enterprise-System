@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -39,12 +39,13 @@ export class MessagesController {
   }
 
   @Get()
-  async getMessages(@Body() body: any): Promise<Message[]> {
-    const { senderId, receiverId, isRoom } = body;
+  async getMessages(@Request() req): Promise<Message[]> {
+    
+    const { senderId, receiverId, isRoom } = req.query;
     this.logger.log(`senderId: ${senderId}, receiverId: ${receiverId}, isRoom: ${isRoom}`);
 
 
-    if (isRoom) {
+    if (isRoom === true) {
       // to add a Guard to check if the user is a member of the room
       return this.messagesService.findMessagesRoom(receiverId);
     }
