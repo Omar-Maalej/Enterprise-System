@@ -7,9 +7,10 @@ import { SseService } from './sse.service';
 export class SseController {
   constructor(private readonly sseService: SseService) {}
 
+  //make it dynamic with the user id
   @Sse('subscribe')
   subscribe(@Res() res: Response): Observable<any> {
-    console.log('Client subscribed', res);
+    // console.log('Client subscribed', res);
     this.sseService.addClient(res);
     return new Observable(subscriber => {
       res.on('close', () => {

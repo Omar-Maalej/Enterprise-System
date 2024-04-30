@@ -22,7 +22,8 @@ import { Response } from 'express';
       this.clients = this.clients.filter(c => c !== client);
     });
   }
-
+  
+  //TODO: match with the user id and send the event to the specific users
   sendEvent(data: any) {
     this.clients.forEach(client => {
       client.write(`data: ${JSON.stringify(data)}\n\n`);
