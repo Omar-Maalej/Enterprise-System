@@ -2,6 +2,7 @@ import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSo
 import { Server, Socket } from 'socket.io';
 import { Message } from './dto/message.model';
 import { CreateMessageDto } from './dto/create-message.dto';
+import { Logger } from "@nestjs/common";
 
 @WebSocketGateway({
   cors: {
@@ -18,13 +19,33 @@ export class MessagesGateway {
     {id:2, user: 'GL3', content: 'f54z4f5zf456a??;!!!'},
     {id:3, user: 'aymen', content: 'Na9sssssou mel 7essss !!!'},
   ];
+  private readonly logger = new Logger(MessagesGateway.name);
+
+  afterInit() {
+    this.logger.log("Initialized");
+    console.log('Initialized');
+  }
+  handleConnection(client: any, ...args: any[]) {
+    const { sockets } = this.server.sockets;
+
+    console.log(sockets);
+
+    this.logger.log(`Client id: ${client.id} connected`);
+    this.logger.debug(`Number of connected clients: ${sockets.size}`);
+  }
+
+  handleDisconnect(client: any) {
+    this.logger.log(`Cliend id:${client.id} disconnected`);
+  }
+
+
   @SubscribeMessage('message')
   handleMessage( ): string {
     console.log('connectiong to message');
     
     return 'Hello world!';
   }
-  @SubscribeMessage('allMessages')
+  @SubscribeMessage(' ')
   getAllMessages(@ConnectedSocket() client: Socket): any {
     console.log(client);
     return this.messges;
