@@ -14,6 +14,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import * as dotenv from 'dotenv';
 import { RedisModule } from 'nestjs-ioredis';
 import { SseModule } from './sse/sse.module';
+import { PostsModule } from './posts/posts.module';
 
 
 
@@ -43,7 +44,7 @@ dotenv.config();
       password: process.env.REDIS_PASSWORD,
       db: parseInt(process.env.REDIS_DB),
     })
-    ,AuthModule, MessagesModule, RoomsModule,
+    ,AuthModule, MessagesModule, RoomsModule, PostsModule,
   ],
   // controllers: [AppController, MessageController],
   controllers: [AppController],
