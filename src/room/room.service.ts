@@ -1,25 +1,25 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateRoomInput } from './dto/create-room.input';
-import { UpdateRoomInput } from './dto/update-room.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Room } from './entities/room.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
+import { CreateRoomDto } from './dto/create-room.dto';
+import { UpdateRoomDto } from './dto/update-room.dto';
 
 @Injectable()
-export class RoomsService {
+export class RoomService {
   
   constructor(@InjectRepository(Room) private roomRepository: Repository<Room>,
               private readonly usersService : UsersService              
 ){}
 
-  async create(createRoomInput: CreateRoomInput): Promise<Room> {
+  async create(createRoomDto: CreateRoomDto): Promise<Room> {
     const room = this.roomRepository.create({
-      ...createRoomInput,
+      ...createRoomDto,
       createdAt: new Date(),
     });
-    const users = await Promise.all(createRoomInput.userIds.map(userId => this.usersService.findOne(userId)));
-    if(users.length !== createRoomInput.userIds.length)
+    const users = await Promise.all(createRoomDto.userIds.map(userId => this.usersService.findOne(userId)));
+    if(users.length !== createRoomDto.userIds.length)
       throw new NotFoundException(`Some users not found`);
 
     room.users = users;
@@ -29,13 +29,6 @@ export class RoomsService {
 
 
   async findAll(): Promise<Room[]> {
-  /*   const rooms =  await this.roomRepository
-    .createQueryBuilder('room')
-    .leftJoinAndSelect('room.users', 'user')
-    .getMany();
-    console.log(rooms);
-    return rooms; */
-    // fixed with @resolveField in rooms.resolver.ts
     return this.roomRepository.find();
   }
 
@@ -46,16 +39,14 @@ export class RoomsService {
     else return room;
   }
 
-  async update(updateRoomInput: UpdateRoomInput): Promise<Room>  {
-    //console.log(updateRoomInput);
+  async update(id : number ,updateRoomDto: UpdateRoomDto): Promise<Room>  {
     const room = await this.roomRepository.preload({
-      id: updateRoomInput.id,
-      ...updateRoomInput});
-    //console.log(room);
+      id,
+      ...updateRoomDto});
   if (room) {
     return this.roomRepository.save(room);
   } else {
-    throw new NotFoundException(`room with id ${updateRoomInput.id} doesn't exist `);
+    throw new NotFoundException(`room with id ${id} doesn't exist `);
   }
   }
 

@@ -1,7 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
 import { UserRoleEnum } from 'src/enums/user-role.enum';
-import { Room } from 'src/rooms/entities/room.entity';
+import { Room } from 'src/room/entities/room.entity';
 import { Column, DeleteDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')

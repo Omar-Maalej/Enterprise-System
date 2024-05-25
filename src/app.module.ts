@@ -5,15 +5,13 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module';
-import { RoomsModule } from './rooms/rooms.module';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 // import { MessagesGateway } from './chat/message.gateway';
 // import { MessageController } from './chat/message.controller';
 // import { MessageService } from './chat/message.service';
 import * as dotenv from 'dotenv';
 import { RedisModule } from 'nestjs-ioredis';
 import { SseModule } from './sse/sse.module';
+import { RoomModule } from './room/room.module';
 
 
 
@@ -22,10 +20,6 @@ dotenv.config();
 @Module({
   imports: [UsersModule,
     SseModule,
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-    driver: ApolloDriver,
-    autoSchemaFile : 'src/schema.gql'
-  }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DATABASE_HOST,
@@ -35,7 +29,7 @@ dotenv.config();
       database: process.env.DATABASE_NAME,
       entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
     }), 
     RedisModule.forRoot({
       host: process.env.REDIS_HOST,
@@ -43,7 +37,7 @@ dotenv.config();
       password: process.env.REDIS_PASSWORD,
       db: parseInt(process.env.REDIS_DB),
     })
-    ,AuthModule, MessagesModule, RoomsModule,
+    ,AuthModule, MessagesModule, RoomModule,
   ],
   // controllers: [AppController, MessageController],
   controllers: [AppController],

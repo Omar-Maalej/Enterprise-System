@@ -3,7 +3,7 @@ import { Server, Socket } from 'socket.io';
 import { CreateMessageDto } from 'src/messages/dto/create-message.dto';
 import { Logger } from '@nestjs/common';
 import { MessagesService } from 'src/messages/messages.service';
-import { Room } from 'src/rooms/entities/room.entity';
+import { Room } from 'src/room/entities/room.entity';
 import { RedisService } from 'src/redis/redis.service';
 
 @WebSocketGateway({
