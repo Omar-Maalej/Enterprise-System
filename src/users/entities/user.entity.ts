@@ -60,6 +60,7 @@ export class User {
     enum: UserRoleEnum,
     default: UserRoleEnum.USER
 })
+
 @Field()
   role: string;
 
