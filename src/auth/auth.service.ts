@@ -1,20 +1,23 @@
-import {  Injectable, NotFoundException } from '@nestjs/common';
+import {Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { UserLoginDto } from './dto/user-login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { UserLoginDto } from './dto/user-login.dto';
+import { User } from 'src/users/entities/user.entity';
+
 
 @Injectable()
 export class AuthService {
-
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
         private jwtService: JwtService
       ) {}
       
+    
+
+
       async login(credentials: UserLoginDto) {
         const { username, password } = credentials;
         // We can log in via username or email
@@ -42,4 +45,7 @@ export class AuthService {
           throw new NotFoundException('Wrong username or password');
         }
       }
-    }  
+      private async hashPassword(password: string, salt: string): Promise<string> {
+        return bcrypt.hash(password, salt);
+      }
+ }
