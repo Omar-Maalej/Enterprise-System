@@ -1,5 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { User } from 'src/users/entities/user.entity';
+import { OneToMany } from 'typeorm';
+import { Comment } from 'src/comments/entities/comment.entity';
 
 @ObjectType()
 export class Post {
@@ -11,5 +13,9 @@ export class Post {
 
   @Field(() => User, { description: 'Author of the post' })
   author: User;
+
+  @Field(() => [Comment], { description: 'Comments on the post' })
+  @OneToMany(() => Comment, comment => comment.post)
+  comments: Comment[];
 
 }
