@@ -12,6 +12,8 @@ import * as dotenv from 'dotenv';
 import { RedisModule } from 'nestjs-ioredis';
 import { SseModule } from './sse/sse.module';
 import { RoomModule } from './room/room.module';
+import { PostsModule } from './posts/posts.module';
+import { CommentsModule } from './comments/comments.module';
 
 
 
@@ -37,7 +39,7 @@ dotenv.config();
       password: process.env.REDIS_PASSWORD,
       db: parseInt(process.env.REDIS_DB),
     })
-    ,AuthModule, MessagesModule, RoomModule,
+    ,AuthModule, MessagesModule, RoomModule, PostsModule, CommentsModule,
   ],
   // controllers: [AppController, MessageController],
   controllers: [AppController],
