@@ -9,6 +9,6 @@ import { SseModule } from 'src/sse/sse.module';
   imports: [TypeOrmModule.forFeature([User]), SseModule],
   controllers: [UsersController],
   providers: [UsersService],
-  exports : [TypeOrmModule.forFeature([User])]
+  exports : [TypeOrmModule.forFeature([User]), UsersService]
 })
 export class UsersModule {}
