@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { QueryFailedError, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationQueryDto } from './dto/pagination-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -25,6 +26,21 @@ export class UsersService {
 
   async findAll() :Promise<User[]> {
     return await this.userRepository.find();
+  }
+
+  async findAllPaginated(paginationQuery: PaginationQueryDto): Promise<any> {
+    const { page = 1, limit = 10 } = paginationQuery;
+    const [results, total] = await this.userRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+  
+    return {
+      data: results,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: number) :Promise<User> {
