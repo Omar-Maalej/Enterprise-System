@@ -37,9 +37,22 @@ type User {
   deletedAt: DateTime
 }
 
+type Post {
+  """Unique identifier for the post"""
+  id: Int!
+
+  """Content of the post"""
+  content: String!
+
+  """Author of the post"""
+  author: User!
+}
+
 type Query {
   rooms: [Room!]!
   room(id: Int!): Room!
+  posts: [Post!]!
+  post(id: Int!): Post!
 }
 
 type Mutation {
@@ -48,6 +61,9 @@ type Mutation {
   removeRoom(id: Int!): Room!
   addUsersToRoom(roomId: Int!, userIds: [Int!]!): Room!
   removeUsersFromRoom(roomId: Int!, userIds: [Int!]!): Room!
+  createPost(createPostInput: CreatePostInput!): Post!
+  updatePost(updatePostInput: UpdatePostInput!): Post!
+  removePost(id: Int!): Post!
 }
 
 input CreateRoomInput {
@@ -64,5 +80,16 @@ input UpdateRoomInput {
 
   """List of user IDs to be added to the room"""
   userIds: [ID!]
+  id: Int!
+}
+
+input CreatePostInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdatePostInput {
+  """Example field (placeholder)"""
+  exampleField: Int
   id: Int!
 }
