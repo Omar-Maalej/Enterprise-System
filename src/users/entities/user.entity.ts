@@ -2,7 +2,9 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
 import { UserRoleEnum } from 'src/enums/user-role.enum';
 import { Room } from 'src/room/entities/room.entity';
-import { Column, DeleteDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Post } from 'src/posts/entities/post.entity';
+import { Comment } from 'src/comments/entities/comment.entity';
 
 @Entity('user')
 @ObjectType()
@@ -77,5 +79,12 @@ export class User {
   @JoinTable()
   rooms : Room[];
     
+
+  @OneToMany(() => Post, post => post.author)
+  posts: Post[];
+
+  @OneToMany(() => Comment, comment => comment.author)
+  comments: Comment[];
+
  
 }
