@@ -5,7 +5,7 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-
+@UseGuards(JWTAuthGuard)
 @Controller('rooms')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
@@ -26,7 +26,7 @@ export class RoomController {
     return this.roomService.removeUsersFromRoom(body.roomId, body.userIds);
   }
 
-  @UseGuards(JWTAuthGuard)
+ 
   @Get()
   findAll() {
     return this.roomService.findAll();
