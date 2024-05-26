@@ -16,4 +16,4 @@ export class Comment {
   @Field(() => Int, { description: 'Unique identifier for the user' })
   post: Post;
 
-}
+} 
