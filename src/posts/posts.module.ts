@@ -9,6 +9,6 @@ import { Comment } from 'src/comments/entities/comment.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Post, User, Comment])],
   providers: [PostsService, PostsResolver],
-  exports: [PostsService, TypeOrmModule], // Export TypeOrmModule to make repositories available
+  exports: [PostsService, TypeOrmModule],
 })
 export class PostsModule {}

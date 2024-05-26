@@ -2,27 +2,33 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Room {
-  """The unique identifier of the room"""
-  id: ID!
+type Comment {
+  """Unique identifier for the comment"""
+  id: Int!
 
-  """The name of the room"""
-  name: String!
+  """Content of the comment"""
+  content: String!
 
-  """The date the room was created"""
-  createdAt: DateTime!
+  """Author of the comment"""
+  author: User!
 
-  """List of users in the room"""
-  users: [User!]!
-
-  """The date the room was deleted"""
-  deleteAt: DateTime!
+  """Post the comment belongs to"""
+  post: Post!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+type Post {
+  """Unique identifier for the post"""
+  id: Int!
+
+  """Content of the post"""
+  content: String!
+
+  """Author of the post"""
+  author: User!
+
+  """Comments on the post"""
+  comments: [Comment!]
+}
 
 type User {
   id: ID!
@@ -37,59 +43,63 @@ type User {
   deletedAt: DateTime
 }
 
-type Post {
-  """Unique identifier for the post"""
-  id: Int!
-
-  """Content of the post"""
-  content: String!
-
-  """Author of the post"""
-  author: User!
-}
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Query {
-  rooms: [Room!]!
-  room(id: Int!): Room!
   posts: [Post!]!
   post(id: Int!): Post!
+  comments: [Comment!]!
+  comment(id: Int!): Comment!
 }
 
 type Mutation {
-  createRoom(createRoomInput: CreateRoomInput!): Room!
-  updateRoom(updateRoomInput: UpdateRoomInput!): Room!
-  removeRoom(id: Int!): Room!
-  addUsersToRoom(roomId: Int!, userIds: [Int!]!): Room!
-  removeUsersFromRoom(roomId: Int!, userIds: [Int!]!): Room!
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
   removePost(id: Int!): Post!
-}
-
-input CreateRoomInput {
-  """the name of the room"""
-  name: String!
-
-  """List of user IDs to be added to the room"""
-  userIds: [ID!]
-}
-
-input UpdateRoomInput {
-  """the name of the room"""
-  name: String
-
-  """List of user IDs to be added to the room"""
-  userIds: [ID!]
-  id: Int!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: Int!): Comment!
 }
 
 input CreatePostInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Content of the post"""
+  content: String!
+
+  """Unique identifier for the author (user)"""
+  authorId: Int!
 }
 
 input UpdatePostInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  """Content of the post"""
+  content: String
+
+  """Unique identifier for the author (user)"""
+  authorId: Int
+  id: Int!
+}
+
+input CreateCommentInput {
+  """Content of the comment"""
+  content: String!
+
+  """Unique identifier for the author (user)"""
+  authorId: Int!
+
+  """Unique identifier for the post"""
+  postId: Int!
+}
+
+input UpdateCommentInput {
+  """Content of the comment"""
+  content: String
+
+  """Unique identifier for the author (user)"""
+  authorId: Int
+
+  """Unique identifier for the post"""
+  postId: Int
   id: Int!
 }
