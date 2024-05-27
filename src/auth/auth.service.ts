@@ -78,7 +78,8 @@ export class AuthService {
         expiresIn: '1h'
       });
       return {
-        access_token: jwt
+        access_token: jwt,
+        userData: payload
       };
     } else {
       throw new NotFoundException('Wrong username or password');

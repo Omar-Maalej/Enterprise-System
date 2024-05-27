@@ -1,14 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
-import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { AdminGuard } from 'src/auth/guards/admin.guard';
 
-@UseGuards(JWTAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(
@@ -17,14 +14,12 @@ export class UsersController {
   ) {}
 
   @Post()
-  @UseGuards(AdminGuard)
   async create(@Body() newUser: CreateUserDto) {
-      console.log("newUser",newUser);
       newUser.salt= await bcrypt.genSalt();
       newUser.password=await bcrypt.hash(newUser.password,newUser.salt);
       const userCreated = await this.usersService.create(newUser);
       this.eventEmitter.emit('user.created', userCreated);
-      return userCreated;
+      return userCreated; 
   }
   
   @Get()
@@ -55,6 +50,9 @@ export class UsersController {
   @Get('restore/:id')
   async restoreUser(@Param('id', ParseIntPipe) id: number) {
   return await this.usersService.restoreUser(id);
+
+
+
 }
 
 }

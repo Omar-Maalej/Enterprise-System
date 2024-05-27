@@ -31,21 +31,25 @@ export class MessagesGateway {
     }
 
     async handleConnection(client: Socket): Promise<void> {
-        const userId = client.handshake.query.userId;
+        const userId = client.handshake.query.userId as string;
         if (!userId) {
-            client.disconnect();
-            return;
+          client.disconnect();
+          return;
         } else {
-            await this.redisSerice.addConnection(userId.toString(), client.id);
-
+          await this.redisSerice.addConnection(userId.toString(), client.id);
+          // Emit user connected event
+          this.server.emit('userConnected', { userId });
+          this.logger.log(`User connected: ${userId}`);
         }
-
-    }
+      }
   
-    handleDisconnect(client: Socket): void {
-        const userId = client.handshake.query.userId;
-        this.redisSerice.removeConnection(userId.toString(), client.id);
-    }
+      async handleDisconnect(client: Socket): Promise<void> {
+        const userId = client.handshake.query.userId as string;
+        await this.redisSerice.removeConnection(userId.toString(), client.id);
+        // Emit user disconnected event
+        this.server.emit('userDisconnected', { userId });
+        this.logger.log(`User disconnected: ${userId}`);
+      }
 
     @SubscribeMessage('message')
     handleMessage(): string {
@@ -68,6 +72,7 @@ export class MessagesGateway {
     private async broadcastDirectMessage(receiverId: number, event: string, message: any): Promise<void> {
         const sockets = await this.redisSerice.getConnections(receiverId.toString());
         const senderSockets = await this.redisSerice.getConnections(message.senderId);
+        console.log("Sender Sockets: ", senderSockets);
         const allSockets = [...sockets, ...senderSockets];
         console.log("Sockets: ", sockets);
         allSockets.forEach(socketId => {
@@ -91,6 +96,8 @@ export class MessagesGateway {
     async addMessage(@MessageBody() messageDto: CreateMessageDto) {
        
         const newMessage = await this.messagesService.create(messageDto);
+
+        console.log("New Message: ", messageDto);
 
         if(!newMessage.roomId) {
 
