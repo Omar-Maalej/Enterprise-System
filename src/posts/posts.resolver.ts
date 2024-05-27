@@ -28,6 +28,7 @@ export class PostsResolver {
     this.eventEmitter.emit(PostEventEnum.POST_CREATED, createPostInput);
     return post;
 
+    // return this.postsService.create(createPostInput);
   }
 
   @Query(() => [Post], { name: 'posts' })
