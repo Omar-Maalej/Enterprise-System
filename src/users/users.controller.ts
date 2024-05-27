@@ -70,4 +70,11 @@ export class UsersController {
   async restoreUser(@Param('id', ParseIntPipe) id: number) {
     return await this.usersService.restoreUser(id);
   }
-}
+
+
+  @Post('/online-users')
+  async getOnlineUsers(){
+    return await this.usersService.getOnlineUsers();
+  }
+
+

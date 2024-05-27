@@ -82,6 +82,7 @@ export class RoomService {
   }
 
   getUsers(id: number) {
-    return this.usersService.findUsersByRoomId(id);
+    // return this.usersService.findUsersByRoomId(id);
+    return "test"
   }
 }
