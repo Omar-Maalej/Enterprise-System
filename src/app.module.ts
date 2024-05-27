@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 // import { MessagesGateway } from './chat/message.gateway';
 // import { MessageController } from './chat/message.controller';
 // import { MessageService } from './chat/message.service';
@@ -17,6 +16,8 @@ import { RoomModule } from './room/room.module';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
 import { MorganMiddleware } from './morgan.middleware';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { FileModule } from './file/file.module';
 
 dotenv.config();
 
@@ -30,7 +31,7 @@ dotenv.config();
       context: ({ req }) => ({ req }),
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USER,
@@ -51,6 +52,7 @@ dotenv.config();
     RoomModule,
     PostsModule,
     CommentsModule,
+    FileModule,
   ],
   // controllers: [AppController, MessageController],
   controllers: [AppController],
