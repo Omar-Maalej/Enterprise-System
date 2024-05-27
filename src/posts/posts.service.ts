@@ -6,8 +6,6 @@ import { UpdatePostInput } from './dto/update-post.input';
 import { Post } from './entities/post.entity';
 import { User } from 'src/users/entities/user.entity';
 
-
-
 @Injectable()
 export class PostsService {
   constructor(
@@ -20,13 +18,14 @@ export class PostsService {
   async create(createPostInput: CreatePostInput): Promise<Post> {
     const { content, authorId } = createPostInput;
 
-    const author = await this.usersRepository.findOne({ where: { id: authorId } });
+    const author = await this.usersRepository.findOne({
+      where: { id: authorId },
+    });
     if (!author) {
       throw new NotFoundException(`User with ID ${authorId} not found`);
     }
 
     const newPost = this.postsRepository.create({
-      image: createPostInput.image.filename,
       content,
       author,
     });
@@ -45,7 +44,10 @@ export class PostsService {
   }
 
   async findOne(id: number): Promise<Post> {
-    const post = await this.postsRepository.findOne({ where: { id }, relations: ['author', 'comments'] });
+    const post = await this.postsRepository.findOne({
+      where: { id },
+      relations: ['author', 'comments'],
+    });
     if (!post) {
       throw new NotFoundException(`Post with ID ${id} not found`);
     }

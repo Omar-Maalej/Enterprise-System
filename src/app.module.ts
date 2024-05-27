@@ -17,8 +17,7 @@ import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
 import { MorganMiddleware } from './morgan.middleware';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-
-
+import { FileModule } from './file/file.module';
 
 dotenv.config();
 
@@ -30,10 +29,9 @@ dotenv.config();
       driver: ApolloDriver,
       autoSchemaFile: 'src/schema.gql',
       context: ({ req }) => ({ req }),
-      
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USER,
@@ -54,6 +52,7 @@ dotenv.config();
     RoomModule,
     PostsModule,
     CommentsModule,
+    FileModule,
   ],
   // controllers: [AppController, MessageController],
   controllers: [AppController],
