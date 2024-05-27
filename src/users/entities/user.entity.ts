@@ -27,7 +27,9 @@ export class User {
   @Field()
   email: string;
 
+
    @Column({
+        nullable:true,
         length: 50
   })
   @Field()

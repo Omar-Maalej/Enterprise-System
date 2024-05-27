@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -16,6 +16,7 @@ import { SseModule } from './sse/sse.module';
 import { RoomModule } from './room/room.module';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
+import { MorganMiddleware } from './morgan.middleware';
 
 dotenv.config();
 
@@ -56,4 +57,8 @@ dotenv.config();
   // providers: [AppService,MessagesGateway, MessageService],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(MorganMiddleware).forRoutes('*');
+  }
+}
