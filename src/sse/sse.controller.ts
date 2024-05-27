@@ -1,20 +1,28 @@
-import { Controller, Sse, Res } from '@nestjs/common';
+import { Controller, Sse, Res, Param, UseGuards, Req } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { SseService } from './sse.service';
+import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('events')
 export class SseController {
   constructor(private readonly sseService: SseService) {}
 
-  //make it dynamic with the user id
+  @UseGuards(JWTAuthGuard)
   @Sse('subscribe')
-  subscribe(@Res() res: Response): Observable<any> {
-    // console.log('Client subscribed', res);
-    this.sseService.addClient(res);
-    return new Observable(subscriber => {
+  subscribe(@Req() req: Request, @Res() res: Response): Observable<any> {
+    const user: any = req.user;
+    const userToSse = {
+      userId: user.userId,
+      role: user.role,
+    };
+
+    this.sseService.addClient(userToSse, res);
+
+    return new Observable((subscriber) => {
       res.on('close', () => {
         subscriber.complete();
+        this.sseService.removeClient(userToSse, res);
       });
     });
   }
