@@ -40,6 +40,11 @@ export class RoomController {
     return this.roomService.findAll();
   }
 
+  @Get('user-rooms')
+  findUserRooms() {
+    return this.roomService.findUserRooms();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.roomService.findOne(+id);
