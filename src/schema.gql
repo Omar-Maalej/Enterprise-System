@@ -19,10 +19,12 @@ type Comment {
   createdAt: DateTime!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+type File {
+  id: Float!
+  title: String!
+  path: String!
+  type: String!
+}
 
 type Post {
   """Unique identifier for the post"""
@@ -39,6 +41,9 @@ type Post {
 
   """Comments on the post"""
   comments: [Comment!]
+
+  """Files with the post"""
+  files: [File!]
 }
 
 type User {

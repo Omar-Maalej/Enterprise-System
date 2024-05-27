@@ -3,7 +3,6 @@
 // import { config } from 'dotenv';
 // import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
-
 // async function bootstrap() {
 //   config();
 //   const app = await NestFactory.create(AppModule);
@@ -32,8 +31,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
-
-  
 
   await app.listen(3000);
 }

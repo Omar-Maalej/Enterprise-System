@@ -9,6 +9,7 @@ import {
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { User } from 'src/users/entities/user.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
+import { File } from 'src/file/entities/file.entity';
 
 @ObjectType()
 @Entity()
@@ -35,4 +36,11 @@ export class Post {
   })
   @OneToMany(() => Comment, (comment) => comment.post, { eager: true })
   comments: Comment[];
+
+  @Field(() => [File], {
+    description: 'Files with the post',
+    nullable: true,
+  })
+  @OneToMany(() => File, (file) => file.post, { eager: true })
+  files: File[];
 }

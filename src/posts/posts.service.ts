@@ -1,11 +1,10 @@
-import { Injectable, NotFoundException, UseGuards } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { Post } from './entities/post.entity';
 import { User } from 'src/users/entities/user.entity';
-import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Injectable()
 export class PostsService {
@@ -19,7 +18,9 @@ export class PostsService {
   async create(createPostInput: CreatePostInput): Promise<Post> {
     const { content, authorId } = createPostInput;
 
-    const author = await this.usersRepository.findOne({ where: { id: authorId } });
+    const author = await this.usersRepository.findOne({
+      where: { id: authorId },
+    });
     if (!author) {
       throw new NotFoundException(`User with ID ${authorId} not found`);
     }
@@ -52,7 +53,10 @@ export class PostsService {
   }
 
   async findOne(id: number): Promise<Post> {
-    const post = await this.postsRepository.findOne({ where: { id }, relations: ['author', 'comments'] });
+    const post = await this.postsRepository.findOne({
+      where: { id },
+      relations: ['author', 'comments'],
+    });
     if (!post) {
       throw new NotFoundException(`Post with ID ${id} not found`);
     }
