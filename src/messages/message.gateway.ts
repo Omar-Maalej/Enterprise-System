@@ -35,21 +35,35 @@ export class MessagesGateway {
         if (!userId) {
           client.disconnect();
           return;
-        } else {
-          await this.redisSerice.addConnection(userId.toString(), client.id);
-          // Emit user connected event
-          this.server.emit('userConnected', { userId });
-          this.logger.log(`User connected: ${userId}`);
         }
-      }
+    
+        await this.redisSerice.addConnection(userId.toString(), client.id);
+    
+        // Emit user connected event to all connected clients
+        const allUsers = await this.redisSerice.getAllConnections();
+        console.log("All Users: ", allUsers);
+        allUsers.forEach(user => {
+          this.server.to(user).emit('userConnected', { userId });
+        });
+    
+        this.logger.log(`User connected: ${userId}`);
+    }
   
-      async handleDisconnect(client: Socket): Promise<void> {
+    async handleDisconnect(client: Socket): Promise<void> {
         const userId = client.handshake.query.userId as string;
         await this.redisSerice.removeConnection(userId.toString(), client.id);
-        // Emit user disconnected event
-        this.server.emit('userDisconnected', { userId });
+
+        // Emit user disconnected event to all connected clients
+        const allUsers = await this.redisSerice.getAllConnections();
+        console.log("All Users: ", allUsers);
+        allUsers.forEach(user => {
+            console.log("User: ", user);
+            this.server.to(user).emit('userDisconnected', { userId });
+        });
+
         this.logger.log(`User disconnected: ${userId}`);
-      }
+    }
+    
 
     @SubscribeMessage('message')
     handleMessage(): string {
