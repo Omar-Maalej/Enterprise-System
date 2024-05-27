@@ -38,6 +38,8 @@ export class AuthService {
 
   async login(credentials: UserLoginDto) {
     const { username, password } = credentials;
+    console.log('Entered username:', username);
+    console.log('Entered password:', password);
 
     const user = await this.userRepository.createQueryBuilder("user")
       .where("user.username = :username or user.email = :username", { username })
@@ -51,9 +53,15 @@ export class AuthService {
     console.log('Entered username:', username);
     console.log('Entered password:', password);
     console.log('Stored hashed password:', user.password);
+    
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log('Password valid:', isPasswordValid);
+
+    const isPasswordValid = await bcrypt.compare(password, user.password).
+      then((result) => {
+        console.log('Password valid:', result);
+        return result;
+      });
+    console.log('Password valid:',  isPasswordValid);
 
     if (isPasswordValid) {
       const payload = {
@@ -64,7 +72,10 @@ export class AuthService {
 
       console.log('JWT payload:', payload);
 
-      const jwt = await this.jwtService.sign(payload);
+      const jwt = await this.jwtService.sign(payload, {
+        secret: 'secretKey',
+        expiresIn: '1h'
+      });
       return {
         access_token: jwt
       };

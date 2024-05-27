@@ -41,17 +41,24 @@ export class User {
   @Field()
   email: string;
 
-  @Column()
+  @Column({
+    length: 50,
+    nullable:true
+  })
   @Field()
   cin: string ;
 
    @Column({
+        nullable:true,
         length: 50
   })
   @Field()
   jobtitle: string;
 
-  @Column()
+
+  @Column({
+    nullable:true
+  })
   @Field()
   picture: string;
 
