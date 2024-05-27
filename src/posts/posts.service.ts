@@ -39,7 +39,8 @@ export class PostsService {
   }
 
   findAll(): Promise<Post[]> {
-    return this.postsRepository.find({ relations: ['author', 'comments'] });
+    // return this.postsRepository.find({ relations: ['author', 'comments'] });
+    return this.postsRepository.find({ relations: ['author', 'comments'], order: { createdAt: 'DESC' } });
   }
 
   async findOne(id: number): Promise<Post> {
