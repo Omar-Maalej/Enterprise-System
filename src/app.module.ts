@@ -18,6 +18,7 @@ import { CommentsModule } from './comments/comments.module';
 import { MorganMiddleware } from './morgan.middleware';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { FileModule } from './file/file.module';
+import { StatisticsModule } from './statistics/statistics.module';
 
 dotenv.config();
 
@@ -31,7 +32,7 @@ dotenv.config();
       context: ({ req }) => ({ req }),
     }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USER,
@@ -53,6 +54,7 @@ dotenv.config();
     PostsModule,
     CommentsModule,
     FileModule,
+    StatisticsModule,
   ],
   // controllers: [AppController, MessageController],
   controllers: [AppController],
