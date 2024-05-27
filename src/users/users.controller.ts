@@ -80,4 +80,5 @@ export class UsersController {
   async getOnlineUsers() {
     return await this.usersService.getOnlineUsers();
   }
+
 }
