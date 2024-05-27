@@ -3,13 +3,19 @@ import { CommentsService } from './comments.service';
 import { Comment } from './entities/comment.entity';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
+import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { UseGuards } from '@nestjs/common';
+import { UserDec } from 'src/decorators/user.decorator';
+import { User } from 'src/users/entities/user.entity';
 
+@UseGuards(JWTAuthGuard)
 @Resolver(() => Comment)
 export class CommentsResolver {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Mutation(() => Comment)
-  createComment(@Args('createCommentInput') createCommentInput: CreateCommentInput) {
+  createComment(@Args('createCommentInput') createCommentInput: CreateCommentInput, @UserDec() user: User){
+    createCommentInput.authorId = user.id;
     return this.commentsService.create(createCommentInput);
   }
 
