@@ -26,6 +26,7 @@ export class PostsService {
     }
 
     const newPost = this.postsRepository.create({
+      image: createPostInput.image.filename,
       content,
       author,
     });

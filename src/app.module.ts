@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { MessagesModule } from './messages/messages.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 // import { MessagesGateway } from './chat/message.gateway';
 // import { MessageController } from './chat/message.controller';
 // import { MessageService } from './chat/message.service';
@@ -17,6 +16,9 @@ import { RoomModule } from './room/room.module';
 import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
 import { MorganMiddleware } from './morgan.middleware';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+
+
 
 dotenv.config();
 
@@ -28,6 +30,7 @@ dotenv.config();
       driver: ApolloDriver,
       autoSchemaFile: 'src/schema.gql',
       context: ({ req }) => ({ req }),
+      
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',

@@ -10,6 +10,8 @@ import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { User } from 'src/users/entities/user.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
 
+
+
 @ObjectType()
 @Entity()
 export class Post {
@@ -35,4 +37,10 @@ export class Post {
   })
   @OneToMany(() => Comment, (comment) => comment.post, { eager: true })
   comments: Comment[];
+
+  @Column()
+  @Field(() => String)
+  image: string;
+  
+
 }

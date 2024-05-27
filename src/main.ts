@@ -17,12 +17,16 @@ import { AppModule } from './app.module';
 import { config } from 'dotenv';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as cors from 'cors';
+import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
+
 
 async function bootstrap() {
   config();
   const app = await NestFactory.create(AppModule);
   app.enableCors({ origin: true });
   app.use(cors());
+  app.use(graphqlUploadExpress({ maxFileSize: 1000000, maxFiles: 10 }));
+
 
   // Swagger configuration
   const options = new DocumentBuilder()
