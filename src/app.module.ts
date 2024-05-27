@@ -28,7 +28,7 @@ dotenv.config();
       autoSchemaFile: 'src/schema.gql',
     }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USER,
