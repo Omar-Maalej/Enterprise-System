@@ -24,6 +24,13 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type File {
+  id: Float!
+  title: String!
+  path: String!
+  type: String!
+}
+
 type Post {
   """Unique identifier for the post"""
   id: Int!
