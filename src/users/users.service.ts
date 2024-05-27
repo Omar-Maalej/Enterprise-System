@@ -5,6 +5,7 @@ import { QueryFailedError, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -15,7 +16,18 @@ export class UsersService {
 
   async create(newUser: CreateUserDto): Promise<User> {
     try {
-      return await this.userRepository.save(newUser);
+      const salt = await bcrypt.genSalt();
+      console.log("new Pass", newUser.password);
+      // const hashedPassword = await bcrypt.hash(newUser.password, salt);
+
+      const userEntity = this.userRepository.create({
+        ...newUser,
+        // password: hashedPassword,
+        salt: salt, // Ensure salt is stored correctly if needed
+      });
+
+      return await this.userRepository.save(userEntity);
+
     } catch (error) {
       if (error instanceof QueryFailedError && error.message.includes('Duplicate entry')) {
         throw new ConflictException('Username or email already exists');
