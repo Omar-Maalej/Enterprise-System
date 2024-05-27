@@ -91,17 +91,21 @@ export class MessagesGateway {
         console.log("Sockets: ", sockets);
         allSockets.forEach(socketId => {
             console.log("Sending message to socket: ", socketId);
-            this.server.to(socketId).emit(event, message);
+            this.server.to(socketId).emit(event, {...message, type: 'private'});
         });
         this.logger.debug(`Sent direct message to ${receiverId}`);
     }
 
     async broadcastToRoom(room: Room, event: string, message: any): Promise<void> {
         const members = room.users;
-        members.forEach(async id => {
-            const sockets = await this.redisSerice.getConnections(id.toString());
+            // console.log("Members: ", members);
+        members.forEach(async user => {
+            this.logger.debug(`Sending message to room ${room.id} and ${user.id}`);
+
+            const sockets = await this.redisSerice.getConnections(user.id.toString());
             sockets.forEach(socketId => {
-                this.server.to(socketId).emit(event, message);
+                this.logger.debug(`Sending message to room ${room.id} and ${socketId}`);
+                this.server.to(socketId).emit(event, {...message, type: 'room'});
             });
         });
     }
