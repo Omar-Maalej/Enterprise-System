@@ -18,16 +18,16 @@ import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
 import { MorganMiddleware } from './morgan.middleware';
 
-
-
 dotenv.config();
 
 @Module({
-  imports: [UsersModule,
+  imports: [
+    UsersModule,
     SseModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile : 'src/schema.gql'
+      autoSchemaFile: 'src/schema.gql',
+      context: ({ req }) => ({ req })
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -39,14 +39,18 @@ dotenv.config();
       entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
-    }), 
+    }),
     RedisModule.forRoot({
       host: process.env.REDIS_HOST,
       port: parseInt(process.env.REDIS_PORT),
       password: process.env.REDIS_PASSWORD,
       db: parseInt(process.env.REDIS_DB),
-    })
-    ,AuthModule, MessagesModule, RoomModule, PostsModule, CommentsModule,
+    }),
+    AuthModule,
+    MessagesModule,
+    RoomModule,
+    PostsModule,
+    CommentsModule,
   ],
   // controllers: [AppController, MessageController],
   controllers: [AppController],

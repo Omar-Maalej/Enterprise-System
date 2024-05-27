@@ -22,31 +22,11 @@ export class User {
   username: string;
 
   @Column({
-    length: 50,
-  })
-  @Field()
-
-  firstname: string;
-
-
-  @Column({
-    length: 50
-  })
-  @Field()
-  lastname: string;
-
-  @Column({
     unique: true
   })
   @Field()
   email: string;
 
-  @Column({
-    length: 50,
-    nullable:true
-  })
-  @Field()
-  cin: string ;
 
    @Column({
         nullable:true,
@@ -55,12 +35,6 @@ export class User {
   @Field()
   jobtitle: string;
 
-
-  @Column({
-    nullable:true
-  })
-  @Field()
-  picture: string;
 
   @Column({
     type: 'enum',

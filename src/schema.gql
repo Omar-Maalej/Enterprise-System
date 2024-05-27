@@ -23,6 +23,9 @@ type Post {
   """Content of the post"""
   content: String!
 
+  """Created date of the post"""
+  createdAt: DateTime!
+
   """Author of the post"""
   author: User!
 
@@ -30,23 +33,19 @@ type Post {
   comments: [Comment!]
 }
 
-type User {
-  id: ID!
-  username: String!
-  firstname: String!
-  lastname: String!
-  email: String!
-  cin: String!
-  jobtitle: String!
-  picture: String!
-  role: String!
-  deletedAt: DateTime
-}
-
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type User {
+  id: ID!
+  username: String!
+  email: String!
+  jobtitle: String!
+  role: String!
+  deletedAt: DateTime
+}
 
 type Query {
   posts: [Post!]!
