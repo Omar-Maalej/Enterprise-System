@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { RoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
@@ -17,16 +26,15 @@ export class RoomController {
   }
 
   @Post('add/users')
-  addUsersToRoom(@Body() body: {roomId: number, userIds: number[]}){
+  addUsersToRoom(@Body() body: { roomId: number; userIds: number[] }) {
     return this.roomService.addUsersToRoom(body.roomId, body.userIds);
   }
 
-  @Post('remove/users') 
-  removeUsersFromRoom(@Body() body: {roomId: number, userIds: number[]}){
+  @Post('remove/users')
+  removeUsersFromRoom(@Body() body: { roomId: number; userIds: number[] }) {
     return this.roomService.removeUsersFromRoom(body.roomId, body.userIds);
   }
 
- 
   @Get()
   findAll() {
     return this.roomService.findAll();

@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -13,20 +24,20 @@ import { AdminGuard } from 'src/auth/guards/admin.guard';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly eventEmitter: EventEmitter2
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   @Post()
   @UseGuards(AdminGuard)
   async create(@Body() newUser: CreateUserDto) {
-      console.log("newUser",newUser);
-      newUser.salt= await bcrypt.genSalt();
-      newUser.password=await bcrypt.hash(newUser.password,newUser.salt);
-      const userCreated = await this.usersService.create(newUser);
-      this.eventEmitter.emit('user.created', userCreated);
-      return userCreated;
+    console.log('newUser', newUser);
+    newUser.salt = await bcrypt.genSalt();
+    newUser.password = await bcrypt.hash(newUser.password, newUser.salt);
+    const userCreated = await this.usersService.create(newUser);
+    this.eventEmitter.emit('user.created', userCreated);
+    return userCreated;
   }
-  
+
   @Get()
   findAll() {
     return this.usersService.findAll();
@@ -43,13 +54,16 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id', ParseIntPipe) id: number){
-      return await this.usersService.softDeleteUser(id);
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return await this.usersService.softDeleteUser(id);
   }
 
   @Get('restore/:id')
@@ -57,9 +71,10 @@ export class UsersController {
     return await this.usersService.restoreUser(id);
   }
 
+
   @Post('/online-users')
   async getOnlineUsers(){
     return await this.usersService.getOnlineUsers();
   }
 
-}
+
