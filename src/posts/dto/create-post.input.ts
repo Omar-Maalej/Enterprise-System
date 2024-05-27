@@ -7,4 +7,7 @@ export class CreatePostInput {
 
   @Field(() => Int, { description: 'Unique identifier for the author (user)' })
   authorId: number;
+
+  @Field(() => String, { description: 'File', nullable: true })
+  path: string;
 }

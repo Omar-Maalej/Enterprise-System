@@ -16,7 +16,7 @@ export class PostsService {
   ) {}
 
   async create(createPostInput: CreatePostInput): Promise<Post> {
-    const { content, authorId } = createPostInput;
+    const { content, authorId, path } = createPostInput;
 
     const author = await this.usersRepository.findOne({
       where: { id: authorId },
@@ -28,6 +28,7 @@ export class PostsService {
     const newPost = this.postsRepository.create({
       content,
       author,
+      path,
     });
 
     await this.postsRepository.save(newPost);
