@@ -15,6 +15,7 @@ export class UsersController {
 
   @Post()
   async create(@Body() newUser: CreateUserDto) {
+      console.log("newUser",newUser);
       newUser.salt= await bcrypt.genSalt();
       newUser.password=await bcrypt.hash(newUser.password,newUser.salt);
       const userCreated = await this.usersService.create(newUser);
