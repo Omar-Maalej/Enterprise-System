@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { QueryFailedError, Repository } from 'typeorm';
@@ -13,13 +17,13 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private readonly redisService: RedisService
+    private readonly redisService: RedisService,
   ) {}
 
   async create(newUser: CreateUserDto): Promise<User> {
     try {
       const salt = await bcrypt.genSalt();
-      console.log("new Pass", newUser.password);
+      console.log('new Pass', newUser.password);
       // const hashedPassword = await bcrypt.hash(newUser.password, salt);
 
       const userEntity = this.userRepository.create({
@@ -29,17 +33,21 @@ export class UsersService {
       });
 
       return await this.userRepository.save(userEntity);
-
     } catch (error) {
-      if (error instanceof QueryFailedError && error.message.includes('Duplicate entry')) {
+      if (
+        error instanceof QueryFailedError &&
+        error.message.includes('Duplicate entry')
+      ) {
         throw new ConflictException('Username or email already exists');
       }
       throw error;
     }
   }
 
-  async findAll() :Promise<User[]> {
-    return await this.userRepository.find();
+  async findAll(mode: boolean): Promise<User[]> {
+    return await this.userRepository.find({
+      withDeleted: mode,
+    });
   }
 
   async findAllPaginated(paginationQuery: PaginationQueryDto): Promise<any> {
@@ -48,7 +56,7 @@ export class UsersService {
       skip: (page - 1) * limit,
       take: limit,
     });
-  
+
     return {
       data: results,
       total,
@@ -57,36 +65,34 @@ export class UsersService {
     };
   }
 
-  async findOne(id: number) :Promise<User> {
-    const user=await this.userRepository.findOne({where: {id}});
-    if (!user){
-      throw new NotFoundException(`le user d'id ${id} n'existe pas` );
-   }
-   return await user;
+  async findOne(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException(`le user d'id ${id} n'existe pas`);
+    }
+    return await user;
   }
 
-  async update(id: number, updatedUser:UpdateUserDto): Promise<User> {
-    const  newUser = await this.userRepository.preload({id,...updatedUser,});
+  async update(id: number, updatedUser: UpdateUserDto): Promise<User> {
+    const newUser = await this.userRepository.preload({ id, ...updatedUser });
     if (newUser) {
       return await this.userRepository.save(newUser);
     } else {
-      throw new NotFoundException(`le user d'id ${id} n'existe pas` );
+      throw new NotFoundException(`le user d'id ${id} n'existe pas`);
     }
-}
- 
-  async softDeleteUser(id: number) {
-   return await this.userRepository.softDelete(id);
-} 
+  }
 
- async restoreUser(id: number) {
-  return await this.userRepository.restore(id);
-}
+  async softDeleteUser(id: number) {
+    return await this.userRepository.softDelete(id);
+  }
+
+  async restoreUser(id: number) {
+    return await this.userRepository.restore(id);
+  }
 
   async getOnlineUsers(): Promise<string[]> {
-
     const onlineUsers = await this.redisService.getUsersIds();
-    console.log("onlineUsers", onlineUsers);
+    console.log('onlineUsers', onlineUsers);
     return onlineUsers;
   }
-  
 }
