@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { Response } from 'express';
+import { EventEnum } from 'src/users/enum/event.enum';
 
 interface UserToSaveSse {
   userId: number;
@@ -85,4 +87,34 @@ export class SseService {
     }
     return userConnections;
   }
+
+  @OnEvent(EventEnum.USER_CREATED)
+  handleUserCreatedEvent(payload: any) {
+    this.sendToAll({
+      type: EventEnum.USER_CREATED,
+      data: payload,
+    
+    });
+  }
+
+  @OnEvent(EventEnum.USER_UPDATED)
+  handleUserUpdatedEvent(payload: any) {
+    this.sendToAll(
+      {
+        type: EventEnum.USER_UPDATED,
+        data: payload,
+      }
+    );
+  }
+
+  @OnEvent(EventEnum.USER_DELETED)
+  handleUserDeletedEvent(payload: any) {
+    this.sendToAll(
+      {
+        type: EventEnum.USER_DELETED,
+        data: payload,
+      }
+    );
+  }
+
 }

@@ -43,9 +43,9 @@ type User {
   username: String!
   email: String!
   role: String!
-  hireDate: DateTime!
-  phoneNumber: String!
-  department: String!
+  hireDate: DateTime
+  phoneNumber: String
+  department: String
   deletedAt: DateTime
 }
 
