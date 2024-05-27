@@ -72,6 +72,10 @@ export class PostsService {
 
   async remove(id: number): Promise<Post> {
     const post = await this.findOne(id);
-    return this.postsRepository.remove(post);
+    if (!post) {
+      throw new NotFoundException(`Post with ID ${id} not found`);
+    }
+    const info = this.postsRepository.remove(post);
+    return post;
   }
 }

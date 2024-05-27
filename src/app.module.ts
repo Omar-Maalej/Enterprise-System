@@ -33,6 +33,7 @@ dotenv.config();
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_DRIVER as any,
+
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USER,
