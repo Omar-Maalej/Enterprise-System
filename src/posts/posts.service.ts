@@ -39,8 +39,17 @@ export class PostsService {
     });
   }
 
-  findAll(): Promise<Post[]> {
-    return this.postsRepository.find({ relations: ['author', 'comments'] });
+  async findAll(): Promise<Post[]> {
+    const posts = await this.postsRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .leftJoinAndSelect('post.comments', 'comments')
+      .leftJoinAndSelect('comments.author', 'commentAuthor')
+      .orderBy('post.createdAt', 'DESC')
+      .addOrderBy('comments.createdAt', 'DESC')
+      .getMany();
+
+    return posts;
   }
 
   async findOne(id: number): Promise<Post> {

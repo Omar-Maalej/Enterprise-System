@@ -13,6 +13,7 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { UserDec } from 'src/decorators/user.decorator';
 
 @UseGuards(JWTAuthGuard)
 @Controller('rooms')
@@ -38,6 +39,11 @@ export class RoomController {
   @Get()
   findAll() {
     return this.roomService.findAll();
+  }
+
+  @Get('user-rooms')
+  findUserRooms(@UserDec() user: any) {
+    return this.roomService.findUserRooms(user.id);
   }
 
   @Get(':id')

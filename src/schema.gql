@@ -14,8 +14,15 @@ type Comment {
 
   """Post the comment belongs to"""
   post: Post!
+
+  """Created date of the post"""
+  createdAt: DateTime!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 type File {
   id: Float!
   title: String!
@@ -42,11 +49,6 @@ type Post {
   """Files with the post"""
   files: [File!]
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type User {
   id: ID!

@@ -85,4 +85,13 @@ export class RoomService {
     // return this.usersService.findUsersByRoomId(id);
     return "test"
   }
+
+  async findUserRooms(userId: number): Promise<Room[]> {
+    return this.roomRepository
+      .createQueryBuilder('room')
+      .innerJoin('room.users', 'user')
+      .where('user.id = :userId', { userId })
+      .getMany();
+  }
+  
 }

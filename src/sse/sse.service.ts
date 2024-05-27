@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Response } from 'express';
+import { PostEventEnum } from 'src/posts/enums/event.enum';
 import { EventEnum } from 'src/users/enum/event.enum';
 
 interface UserToSaveSse {
@@ -112,6 +113,16 @@ export class SseService {
     this.sendToAll(
       {
         type: EventEnum.USER_DELETED,
+        data: payload,
+      }
+    );
+  }
+
+  @OnEvent(PostEventEnum.POST_CREATED)
+  handlePostCreatedEvent(payload: any) {
+    this.sendToAll(
+      {
+        type: PostEventEnum.POST_CREATED,
         data: payload,
       }
     );

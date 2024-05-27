@@ -5,12 +5,16 @@ import { UpdatePostInput } from './dto/update-post.input';
 import { UserDec } from 'src/decorators/user.decorator';
 import { UseGuards } from '@nestjs/common';
 import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PostEventEnum } from './enums/event.enum';
 import { User } from 'src/users/entities/user.entity';
 import { CreatePostInput } from './dto/create-post.input';
 
 @Resolver(() => Post)
 export class PostsResolver {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(private readonly postsService: PostsService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   @Mutation(() => Post)
   @UseGuards(JWTAuthGuard)
@@ -20,8 +24,10 @@ export class PostsResolver {
   ): Promise<Post> {
     console.log('user:', user);
     createPostInput.authorId = user.id;
+    const post = this.postsService.create(createPostInput);
+    this.eventEmitter.emit(PostEventEnum.POST_CREATED, createPostInput);
+    return post;
 
-    return this.postsService.create(createPostInput);
   }
 
   @Query(() => [Post], { name: 'posts' })
