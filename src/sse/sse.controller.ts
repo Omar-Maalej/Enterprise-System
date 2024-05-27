@@ -8,13 +8,15 @@ import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 export class SseController {
   constructor(private readonly sseService: SseService) {}
 
-  @UseGuards(JWTAuthGuard)
+  // @UseGuards(JWTAuthGuard)
   @Sse('subscribe')
   subscribe(@Req() req: Request, @Res() res: Response): Observable<any> {
-    const user: any = req.user;
+    // const user: any = req.user;
+    const userId :any = req.query.userId;
+    const role :any  = req.query.role;
     const userToSse = {
-      userId: user.userId,
-      role: user.role,
+      userId: userId,
+      role: role,
     };
 
     this.sseService.addClient(userToSse, res);

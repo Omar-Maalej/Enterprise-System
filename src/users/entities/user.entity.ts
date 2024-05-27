@@ -43,15 +43,21 @@ export class User {
   role: string;
 
   @Column()
-  @Field()
+  @Field({
+    nullable: true,
+  })
   hireDate: Date;
 
   @Column()
-  @Field()
+  @Field({
+    nullable: true,
+  })
   phoneNumber: string;
 
   @Column()
-  @Field()
+  @Field({
+    nullable: true,
+  })
   department: string;
 
   @Column()
