@@ -2,48 +2,57 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Exclude } from 'class-transformer';
 import { UserRoleEnum } from 'src/enums/user-role.enum';
 import { Room } from 'src/room/entities/room.entity';
-import { Column, DeleteDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  OneToMany,
+} from 'typeorm';
 import { Post } from 'src/posts/entities/post.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
 
 @Entity('user')
 @ObjectType()
 export class User {
-
   @PrimaryGeneratedColumn()
-  @Field(()=> ID)
+  @Field(() => ID)
   id: number;
 
   @Column({
     length: 50,
-    unique: true
+    unique: true,
   })
   @Field()
   username: string;
 
   @Column({
-    unique: true
+    unique: true,
   })
   @Field()
   email: string;
 
-
-   @Column({
-        nullable:true,
-        length: 50
-  })
-  @Field()
-  jobtitle: string;
-
-
   @Column({
     type: 'enum',
     enum: UserRoleEnum,
-    default: UserRoleEnum.USER
-})
-
-@Field()
+    default: UserRoleEnum.USER,
+  })
+  @Field()
   role: string;
+
+  @Column()
+  @Field()
+  hireDate: Date;
+
+  @Column()
+  @Field()
+  phoneNumber: string;
+
+  @Column()
+  @Field()
+  department: string;
 
   @Column()
   @Exclude()
@@ -51,22 +60,19 @@ export class User {
 
   @Column()
   @Exclude()
-    salt: string;
+  salt: string;
 
   @DeleteDateColumn({ nullable: true, default: null })
-  @Field({nullable:true})
+  @Field({ nullable: true })
   deletedAt: Date; // Soft delete column
 
-  @ManyToMany(() => Room, (room)=>room.users)
+  @ManyToMany(() => Room, (room) => room.users)
   @JoinTable()
-  rooms : Room[];
-    
+  rooms: Room[];
 
-  @OneToMany(() => Post, post => post.author)
+  @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
 
-  @OneToMany(() => Comment, comment => comment.author)
+  @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
-
- 
 }

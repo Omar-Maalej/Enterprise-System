@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -15,7 +26,7 @@ import { EventEnum } from './enum/event.enum';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly eventEmitter: EventEmitter2
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   @Post()
@@ -28,7 +39,7 @@ export class UsersController {
       this.eventEmitter.emit(EventEnum.USER_CREATED, userCreated);
       return userCreated;
   }
-  
+
   @Get()
   findAll() {
     return this.usersService.findAll();
@@ -62,9 +73,10 @@ export class UsersController {
     return await this.usersService.restoreUser(id);
   }
 
+
   @Post('/online-users')
   async getOnlineUsers(){
     return await this.usersService.getOnlineUsers();
   }
 
-}
+
