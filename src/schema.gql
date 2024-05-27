@@ -38,6 +38,9 @@ type Post {
   """Content of the post"""
   content: String!
 
+  """Content of the post"""
+  path: String
+
   """Created date of the post"""
   createdAt: DateTime!
 
@@ -46,9 +49,6 @@ type Post {
 
   """Comments on the post"""
   comments: [Comment!]
-
-  """Files with the post"""
-  files: [File!]
 }
 
 type User {
@@ -84,6 +84,9 @@ input CreatePostInput {
 
   """Unique identifier for the author (user)"""
   authorId: Int!
+
+  """File"""
+  path: String
 }
 
 input UpdatePostInput {
@@ -92,6 +95,9 @@ input UpdatePostInput {
 
   """Unique identifier for the author (user)"""
   authorId: Int
+
+  """File"""
+  path: String
   id: Int!
 }
 
