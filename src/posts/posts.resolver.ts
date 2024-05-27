@@ -3,13 +3,20 @@ import { PostsService } from './posts.service';
 import { Post } from './entities/post.entity';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
+import { UserDec } from 'src/decorators/user.decorator';
+import { User } from 'src/users/entities/user.entity';
+import { UseGuards } from '@nestjs/common';
+import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Resolver(() => Post)
 export class PostsResolver {
   constructor(private readonly postsService: PostsService) {}
 
   @Mutation(() => Post)
-  createPost(@Args('createPostInput') createPostInput: CreatePostInput) {
+  @UseGuards(JWTAuthGuard) // Apply the guard to this resolver method
+  createPost(@Args('createPostInput') createPostInput: CreatePostInput, @UserDec() user: any){
+    console.log("user:", user);
+    createPostInput.authorId = user.id;
     return this.postsService.create(createPostInput);
   }
 

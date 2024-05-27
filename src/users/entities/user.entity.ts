@@ -22,28 +22,10 @@ export class User {
   username: string;
 
   @Column({
-    length: 50,
-  })
-  @Field()
-
-  firstname: string;
-
-
-  @Column({
-    length: 50
-  })
-  @Field()
-  lastname: string;
-
-  @Column({
     unique: true
   })
   @Field()
   email: string;
-
-  @Column()
-  @Field()
-  cin: string ;
 
    @Column({
         length: 50
@@ -51,9 +33,6 @@ export class User {
   @Field()
   jobtitle: string;
 
-  @Column()
-  @Field()
-  picture: string;
 
   @Column({
     type: 'enum',

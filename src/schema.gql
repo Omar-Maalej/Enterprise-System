@@ -41,12 +41,8 @@ scalar DateTime
 type User {
   id: ID!
   username: String!
-  firstname: String!
-  lastname: String!
   email: String!
-  cin: String!
   jobtitle: String!
-  picture: String!
   role: String!
   deletedAt: DateTime
 }

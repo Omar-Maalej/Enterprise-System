@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
+import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
 
+@UseGuards(JWTAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(
@@ -14,6 +17,7 @@ export class UsersController {
   ) {}
 
   @Post()
+  @UseGuards(AdminGuard)
   async create(@Body() newUser: CreateUserDto) {
       newUser.salt= await bcrypt.genSalt();
       newUser.password=await bcrypt.hash(newUser.password,newUser.salt);
