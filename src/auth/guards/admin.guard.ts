@@ -26,7 +26,7 @@ export class AdminGuard implements CanActivate {
         secret: 'secretKey',
       });
       request['user'] = payload;
-      console.log(request.user);
+      //console.log(request.user);
       if (request.user.role === 'admin') {
         return true;
       } else {
@@ -38,7 +38,8 @@ export class AdminGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    const authorizationHeader = request.headers.authorization?.split(' ') ?? [];
+    const [type, token] = authorizationHeader;
     return type === 'Bearer' ? token : undefined;
-  }
+}
 }

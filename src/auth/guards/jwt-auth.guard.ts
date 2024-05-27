@@ -13,13 +13,13 @@ export class JWTAuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    console.log("Hello", context.getType());
+    //console.log("Hello", context.getType());
     const ctx = context.getType() === 'http' ? context.switchToHttp().getRequest() : GqlExecutionContext.create(context).getContext().req;
     const request = ctx;
-    console.log("Request Headers:", request.headers);
+    //console.log("Request Headers:", request.headers);
 
     const token = this.extractTokenFromHeader(request);
-    console.log("req", token);
+    //console.log("req", token);
     if (!token) {
       throw new UnauthorizedException();
     }
@@ -27,7 +27,7 @@ export class JWTAuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: 'secretKey',
       });
-      console.log("payload", payload);
+      //console.log("payload", payload);
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
@@ -37,9 +37,8 @@ export class JWTAuthGuard implements CanActivate {
 
   private extractTokenFromHeader(request: Request): string | undefined {
     const authorizationHeader = request.headers.authorization?.split(' ') ?? [];
+    //console.log("authorizationHeader", authorizationHeader);
     const [type, token] = authorizationHeader
-    if(authorizationHeader.length === 1) {
-    return type;
-  }else type === 'Bearer' ? token : undefined;
+    return type === 'Bearer' ? token : undefined;
 }
 }
