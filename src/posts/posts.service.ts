@@ -7,7 +7,6 @@ import { Post } from './entities/post.entity';
 import { User } from 'src/users/entities/user.entity';
 import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-@UseGuards(JWTAuthGuard)
 @Injectable()
 export class PostsService {
   constructor(

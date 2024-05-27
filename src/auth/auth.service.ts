@@ -65,6 +65,7 @@ export class AuthService {
 
     if (isPasswordValid) {
       const payload = {
+        id : user.id,
         username: user.username,
         email: user.email,
         role: user.role
