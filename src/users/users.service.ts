@@ -6,12 +6,14 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
 import * as bcrypt from 'bcrypt';
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private readonly redisService: RedisService
   ) {}
 
   async create(newUser: CreateUserDto): Promise<User> {
@@ -80,11 +82,9 @@ export class UsersService {
   return await this.userRepository.restore(id);
 }
 
-  async findUsersByRoomId(roomId: number): Promise<User[]> {
-    return await this.userRepository
-      .createQueryBuilder('user')
-      .innerJoin('user.rooms', 'room')
-      .where('room.id = :roomId', { roomId })
-      .getMany();
+  async getOnlineUsers(): Promise<string[]> {
+
+    const onlineUsers = await this.redisService.getUsersIds();
+    return onlineUsers;
   }
 }

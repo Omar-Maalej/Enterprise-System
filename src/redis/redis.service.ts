@@ -17,4 +17,8 @@ export class RedisService {
   async getConnections(userId: string): Promise<string[]> {
     return await this.redisClient.smembers(`user:${userId}:sockets`);
   }
+
+  async getUsersIds(): Promise<string[]> {
+    return await this.redisClient.keys('user:*:sockets');
+  }
 }
