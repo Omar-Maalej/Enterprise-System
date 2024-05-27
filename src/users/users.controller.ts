@@ -18,6 +18,8 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
 import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { EventEnum } from './enum/event.enum';
+
 
 @UseGuards(JWTAuthGuard)
 @Controller('users')
@@ -30,12 +32,12 @@ export class UsersController {
   @Post()
   @UseGuards(AdminGuard)
   async create(@Body() newUser: CreateUserDto) {
-    console.log('newUser', newUser);
-    newUser.salt = await bcrypt.genSalt();
-    newUser.password = await bcrypt.hash(newUser.password, newUser.salt);
-    const userCreated = await this.usersService.create(newUser);
-    this.eventEmitter.emit('user.created', userCreated);
-    return userCreated;
+      console.log("newUser",newUser);
+      newUser.salt= await bcrypt.genSalt();
+      newUser.password=await bcrypt.hash(newUser.password,newUser.salt);
+      const userCreated = await this.usersService.create(newUser);
+      this.eventEmitter.emit(EventEnum.USER_CREATED, userCreated);
+      return userCreated;
   }
 
   @Get()
@@ -54,16 +56,16 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return this.usersService.update(id, updateUserDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+    const userUpdated = this.usersService.update(id, updateUserDto);
+    this.eventEmitter.emit(EventEnum.USER_UPDATED, userUpdated);
+    return userUpdated;
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    return await this.usersService.softDeleteUser(id);
+  async deleteUser(@Param('id', ParseIntPipe) id: number){
+      this.eventEmitter.emit(EventEnum.USER_DELETED, id);
+      return await this.usersService.softDeleteUser(id);
   }
 
   @Get('restore/:id')
