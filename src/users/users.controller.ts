@@ -57,10 +57,9 @@ export class UsersController {
     return await this.usersService.restoreUser(id);
   }
 
-  @Get('/online-users')
-  getOnlineUsers(){
-    return this.usersService.getOnlineUsers();
+  @Post('/online-users')
+  async getOnlineUsers(){
+    return await this.usersService.getOnlineUsers();
   }
-
 
 }

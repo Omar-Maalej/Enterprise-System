@@ -85,6 +85,8 @@ export class UsersService {
   async getOnlineUsers(): Promise<string[]> {
 
     const onlineUsers = await this.redisService.getUsersIds();
+    console.log("onlineUsers", onlineUsers);
     return onlineUsers;
   }
+  
 }
