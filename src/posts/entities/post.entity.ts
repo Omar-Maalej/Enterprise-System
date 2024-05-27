@@ -45,6 +45,9 @@ export class Post {
     description: 'Comments on the post',
     nullable: true,
   })
-  @OneToMany(() => Comment, (comment) => comment.post, { eager: true })
+  @OneToMany(() => Comment, (comment) => comment.post, {
+    eager: true,
+    cascade: true,
+  })
   comments: Comment[];
 }
