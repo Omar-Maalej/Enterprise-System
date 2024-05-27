@@ -8,55 +8,51 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 
 @Injectable()
 export class RoomService {
-  
-  constructor(@InjectRepository(Room) private roomRepository: Repository<Room>,
-              private readonly usersService : UsersService              
-){}
+  constructor(
+    @InjectRepository(Room) private roomRepository: Repository<Room>,
+    private readonly usersService: UsersService,
+  ) {}
 
   async create(createRoomDto: CreateRoomDto): Promise<Room> {
     const room = this.roomRepository.create({
       ...createRoomDto,
       createdAt: new Date(),
     });
-    const users = await Promise.all(createRoomDto.userIds.map(userId => this.usersService.findOne(userId)));
-    if(users.length !== createRoomDto.userIds.length)
-      throw new NotFoundException(`Some users not found`);
 
-    room.users = users;
-    
     return this.roomRepository.save(room);
   }
-
 
   async findAll(): Promise<Room[]> {
     return this.roomRepository.find();
   }
 
-  async findOne(id: number) : Promise<Room | null> {
-    const room = await this.roomRepository.findOneBy({id});
-    if(!room)
-      throw new NotFoundException(`room with id ${id} doesn't exist `);
+  async findOne(id: number): Promise<Room | null> {
+    const room = await this.roomRepository.findOneBy({ id });
+    if (!room) throw new NotFoundException(`room with id ${id} doesn't exist `);
     else return room;
   }
 
-  async update(id : number ,updateRoomDto: UpdateRoomDto): Promise<Room>  {
+  async update(id: number, updateRoomDto: UpdateRoomDto): Promise<Room> {
     const room = await this.roomRepository.preload({
       id,
-      ...updateRoomDto});
-  if (room) {
-    return this.roomRepository.save(room);
-  } else {
-    throw new NotFoundException(`room with id ${id} doesn't exist `);
-  }
+      ...updateRoomDto,
+    });
+    if (room) {
+      return this.roomRepository.save(room);
+    } else {
+      throw new NotFoundException(`room with id ${id} doesn't exist `);
+    }
   }
 
   async addUsersToRoom(roomId: number, userIds: number[]): Promise<Room> {
     const room = await this.findOne(roomId);
     //console.log(room);
-    if(!room)
+    if (!room)
       throw new NotFoundException(`room with id ${roomId} doesn't exist `);
-    const users = await Promise.all(userIds.map(userId => this.usersService.findOne(userId)));
-    if(users.length !== userIds.length)
+    const users = await Promise.all(
+      userIds.map((userId) => this.usersService.findOne(userId)),
+    );
+    if (users.length !== userIds.length)
       throw new NotFoundException(`Some users not found`);
     room.users = [...room.users, ...users];
     return this.roomRepository.save(room);
@@ -65,23 +61,24 @@ export class RoomService {
   async removeUsersFromRoom(roomId: number, userIds: number[]): Promise<Room> {
     const room = await this.findOne(roomId);
     console.log(room);
-    if(!room)
+    if (!room)
       throw new NotFoundException(`room with id ${roomId} doesn't exist `);
-    const users = await Promise.all(userIds.map(userId => this.usersService.findOne(userId)));
-    if(users.length !== userIds.length)
+    const users = await Promise.all(
+      userIds.map((userId) => this.usersService.findOne(userId)),
+    );
+    if (users.length !== userIds.length)
       throw new NotFoundException(`Some users not found`);
-    room.users = room.users.filter(user => !userIds.includes(user.id));
+    room.users = room.users.filter((user) => !userIds.includes(user.id));
     return this.roomRepository.save(room);
   }
 
-  async remove(id: number): Promise<Room>{
+  async remove(id: number): Promise<Room> {
     const room = await this.findOne(id);
     if (!room) {
       throw new NotFoundException(`Room with ID ${id} not found`);
     }
     await this.roomRepository.softDelete(id);
     return room;
-    
   }
 
   getUsers(id: number) {

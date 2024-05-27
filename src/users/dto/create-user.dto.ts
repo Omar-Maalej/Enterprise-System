@@ -1,42 +1,41 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword, Matches } from "class-validator";
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+  Matches,
+} from 'class-validator';
 
 export class CreateUserDto {
-    
-    @IsNotEmpty()
-    @IsString()
-    username: string;
+  @IsNotEmpty()
+  @IsString()
+  username: string;
 
-    @IsNotEmpty()
-    @IsString()
-    firstname: string;
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
 
-    @IsNotEmpty()
-    @IsString()
-    lastname: string;
+  @IsNotEmpty()
+  @IsStrongPassword()
+  password: string;
 
-    @IsNotEmpty()
-    @IsEmail()
-    email: string;
+  @IsOptional()
+  @IsString()
+  salt: string;
 
-    @IsNotEmpty()
-    @IsStrongPassword()
-    password: string;
+  @IsNotEmpty()
+  @IsString()
+  department: string;
 
-    @IsNotEmpty()
-    @IsString()
-    salt: string;
+  @IsNotEmpty()
+  @Matches(/^[2-9]\d{7}$/, {
+    message:
+      'Phone number must start with a digit between 2 and 9 and be an 8-digit number',
+  })
+  phoneNumber: string;
 
-    @IsNotEmpty()
-    @IsString()
-    jobtitle: string;
-
-    @IsNotEmpty()
-    @Matches(/^[01]\d{7}$/, {
-      message: 'CIN must start with 0 or 1 and be an 8-digit number',
-    })
-    cin: string;
-
-    @IsOptional()
-    @IsString()
-    picture: string;
+  @IsOptional()
+  @IsString()
+  hireDate: string;
 }
