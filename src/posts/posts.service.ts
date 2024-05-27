@@ -1,11 +1,12 @@
-import { Injectable, NotFoundException, UseGuards } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { Post } from './entities/post.entity';
 import { User } from 'src/users/entities/user.entity';
-import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+
+
 
 @Injectable()
 export class PostsService {
