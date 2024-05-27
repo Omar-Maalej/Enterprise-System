@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   CreateDateColumn,
+  OneToOne,
 } from 'typeorm';
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { User } from 'src/users/entities/user.entity';
@@ -22,6 +23,16 @@ export class Post {
   @Column()
   content: string;
 
+  @Field(() => String, {
+    description: 'Content of the post',
+
+    nullable: true,
+  })
+  @Column({
+    nullable: true,
+  })
+  path: string;
+
   @Field(() => Date, { description: 'Created date of the post' })
   @CreateDateColumn()
   createdAt: Date;
@@ -36,11 +47,4 @@ export class Post {
   })
   @OneToMany(() => Comment, (comment) => comment.post, { eager: true })
   comments: Comment[];
-
-  @Field(() => [File], {
-    description: 'Files with the post',
-    nullable: true,
-  })
-  @OneToMany(() => File, (file) => file.post, { eager: true })
-  files: File[];
 }
